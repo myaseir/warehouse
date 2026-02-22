@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import InventoryForm from "./components/InventoryForm"; // Updated name
+import InventoryAction from "./components/InventoryAction";
 import InventoryTable from "./components/InventoryTable";
-import Login from "./components/Login";
+import Login from "./components/Login"; // Ensure you have created the Login component
 import { LogOut, LayoutDashboard, Database } from "lucide-react";
 
 export default function Home() {
@@ -19,7 +19,6 @@ export default function Home() {
     setIsInitialCheck(false);
   }, []);
 
-  // This is the magic function that updates the table instantly
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1);
   };
@@ -29,14 +28,10 @@ export default function Home() {
     setIsAuthenticated(false);
   };
 
-  if (isInitialCheck) return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-      <div className="animate-pulse text-zinc-500 font-bold uppercase tracking-widest text-xs">
-        Initializing System...
-      </div>
-    </div>
-  );
+  // Prevent flicker during initial check
+  if (isInitialCheck) return null;
 
+  // Show Login Screen if not authenticated
   if (!isAuthenticated) {
     return <Login onLogin={() => setIsAuthenticated(true)} />;
   }
@@ -83,8 +78,7 @@ export default function Home() {
             <LayoutDashboard size={20} className="text-zinc-400" />
             <h2 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Stock Movement</h2>
           </div>
-          {/* We pass handleRefresh to the form's onSuccess prop */}
-          <InventoryForm onSuccess={handleRefresh} />
+          <InventoryAction onSuccess={handleRefresh} />
         </section>
 
         {/* Section 2: Real-time Tracking Table */}
@@ -93,7 +87,6 @@ export default function Home() {
             <Database size={20} className="text-zinc-400" />
             <h2 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Inventory Analytics</h2>
           </div>
-          {/* The key={refreshKey} tells React to reload this component when handleRefresh is called */}
           <InventoryTable key={refreshKey} />
         </section>
 
