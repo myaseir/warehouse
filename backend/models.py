@@ -10,7 +10,8 @@ class Product(BaseModel):
 
 class Transaction(BaseModel):
     product_name: str
-    quantity: int  # Positive for IN, Negative for OUT
+    quantity: int
+    type: str# Positive for IN, Negative for OUT
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 class LoginRequest(BaseModel):
