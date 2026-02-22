@@ -13,21 +13,31 @@ async def get_all_products():
 @router.post("/transaction")
 async def log_transaction(transaction: Transaction):
     try:
-        # 1. Calculate the adjustment (Negative if OUT, Positive if IN)
+        # Debug: See what is coming from the frontend in your terminal
+        print(f"Received: {transaction.product_name}, Qty: {transaction.quantity}, Type: {transaction.type}")
+
+        # 1. Calculate the adjustment
         adjustment = transaction.quantity if transaction.type == "IN" else -transaction.quantity
 
-        # 2. Update the product stock using the adjustment
-        await db.products.update_one(
+        # 2. Update the product stock
+        # NOTE: If current_stock in your DB is a string "10", this WILL fail.
+        # It must be a number 10.
+        update_result = await db.products.update_one(
             {"name": transaction.product_name},
             {
-                "$inc": {"current_stock": adjustment}, # Uses the new variable
+                "$inc": {"current_stock": adjustment},
                 "$setOnInsert": {"category": "General"}
             },
             upsert=True
         )
         
-        # 3. Save the transaction log
-        await db.transactions.insert_one(transaction.dict())
+        # 3. Save the transaction log (converting model to dict)
+        transaction_data = transaction.dict()
+        transaction_data["timestamp"] = datetime.utcnow() # Good for NUML project logs
+        
+        await db.transactions.insert_one(transaction_data)
+        
         return {"status": "success"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"❌ Transaction Error: {str(e)}") # This shows the EXACT error in your terminal
+        raise HTTPException(status_code=500, detail=f"Database Error: {str(e)}")
