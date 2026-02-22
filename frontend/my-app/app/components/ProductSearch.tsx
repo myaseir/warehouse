@@ -23,7 +23,7 @@ export default function ProductSearch({ selected, setSelected }: ProductSearchPr
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8000/api/products');
+        const response = await fetch('https://warehouse-xn8e.vercel.app/api/products');
         if (!response.ok) throw new Error('Failed to fetch products');
         const data = await response.json();
         

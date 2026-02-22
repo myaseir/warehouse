@@ -19,7 +19,7 @@ export default function InventoryForm({ onSuccess }: InventoryFormProps) {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/transaction', {
+      const response = await fetch('https://warehouse-xn8e.vercel.app/api/transaction', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

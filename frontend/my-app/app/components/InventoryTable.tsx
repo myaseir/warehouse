@@ -20,7 +20,7 @@ export default function InventoryTable() {
     const fetchInventory = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8000/api/products');
+        const response = await fetch('https://warehouse-xn8e.vercel.app/api/products');
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setInventory(Array.isArray(data) ? data : []);
