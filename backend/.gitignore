@@ -1,14 +1,12 @@
-# Frontend ignores
+# General
+.env
+.DS_Store
+
+# Frontend
 frontend/node_modules/
 frontend/.next/
-frontend/.env.local
 
-# Backend ignores
+# Backend
 backend/venv/
 backend/__pycache__/
-backend/*.pyc
 backend/.env
-
-# Global ignores
-.DS_Store
-.env
