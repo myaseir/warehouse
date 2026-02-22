@@ -9,7 +9,10 @@ app = FastAPI(title="Warehouse API")
 # 1. CORS Setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://warehouse-beige-eight.vercel.app" # Your live frontend URL
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
